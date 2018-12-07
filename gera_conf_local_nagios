@@ -4,14 +4,14 @@ function LinkAWAN() {
    echo "define host{"
    echo "        use                         linux-server"
    echo "        hostgroups                  Link"
-   echo "        host_name                   LinkA_Loja"${LJ}
-   echo "        alias                       Loja"${LJ}"_LinkA"
+   echo "        host_name                   LinkA_Local"${LC}
+   echo "        alias                       Local"${LC}"_LinkA"
    echo "        address                     "${LinkAWAN}
    echo "        }"
    echo " "
    echo "define service{"
    echo "        use                         local-service"
-   echo "        host_name                   LinkA_Loja"${LJ}
+   echo "        host_name                   LinkA_Local"${LC}
    echo "        service_description         Ping"
    echo "        check_command               check_ping!100.0,20%!500.0,60%"
    echo "        }"
@@ -22,14 +22,14 @@ function LinkBWAN() {
    echo "define host{"
    echo "        use                         linux-server"
    echo "        hostgroups                  Link"
-   echo "        host_name                   LinkB_Loja"${LJ}
-   echo "        alias                       Loja"${LJ}"_LinkB"
+   echo "        host_name                   LinkB_Local"${LC}
+   echo "        alias                       Local"${LC}"_LinkB"
    echo "        address                     "${LinkBWAN}
    echo "        }"
    echo " "
    echo "define service{"
    echo "        use                         local-service"
-   echo "        host_name                   LinkB_Loja"${LJ}
+   echo "        host_name                   LinkB_Local"${LC}
    echo "        service_description         Ping"
    echo "        check_command               check_ping!100.0,20%!500.0,60%"
    echo "        }"
@@ -40,15 +40,15 @@ function Firewall() {
    echo "define host{"
    echo "        use                         linux-server"
    echo "        hostgroups                  Firewall"
-   echo "        host_name                   FW_Loja"${LJ}
-   echo "        alias                       FW_Loja"${LJ}
+   echo "        host_name                   FW_Local"${LC}
+   echo "        alias                       FW_Local"${LC}
    echo "        address                     "${FW}
-   echo "        parents                     LinkA_Loja"${LJ}",LinkB_Loja"${LJ}
+   echo "        parents                     LinkA_Local"${LC}",LinkB_Local"${LC}
    echo "        }"
    echo " "
    echo "define service{"
    echo "        use                         local-service"
-   echo "        host_name                   FW_Loja"${LJ}
+   echo "        host_name                   FW_Local"${LC}
    echo "        service_description         Ping"
    echo "        check_command               check_ping!100.0,20%!500.0,60%"
    echo "        }"
@@ -60,15 +60,15 @@ function Switch_fw() {
    echo "define host{"
    echo "        use                         linux-server"
    echo "        hostgroups                  Switch"
-   echo "        host_name                   "${switch}"_Loja"${LJ}
-   echo "        alias                       Loja"${LJ}"_"${switch}
+   echo "        host_name                   "${switch}"_Local"${LC}
+   echo "        alias                       Local"${LC}"_"${switch}
    echo "        address                     "${SW}
-   echo "        parents                     FW_Loja"${LJ}
+   echo "        parents                     FW_Local"${LC}
    echo "        }"
    echo " "
    echo "define service{"
    echo "        use                         local-service"
-   echo "        host_name                   "${switch}"_Loja"${LJ}
+   echo "        host_name                   "${switch}"_Local"${LC}
    echo "        service_description         Ping"
    echo "        check_command               check_ping!100.0,20%!500.0,60%"
    echo "        }"
@@ -80,15 +80,15 @@ function Switch_link() {
    echo "define host{"
    echo "        use                         linux-server"
    echo "        hostgroups                  Switch"
-   echo "        host_name                   "${switch}"_Loja"${LJ}
-   echo "        alias                       Loja"${LJ}"_"${switch}
+   echo "        host_name                   "${switch}"_Local"${LC}
+   echo "        alias                       Local"${LC}"_"${switch}
    echo "        address                     "${SW}
-   echo "        parents                     LinkA_Loja"${LJ}",LinkB_Loja"${LJ}
+   echo "        parents                     LinkA_Local"${LC}",LinkB_Local"${LC}
    echo "        }"
    echo " "
    echo "define service{"
    echo "        use                         local-service"
-   echo "        host_name                   "${switch}"_Loja"${LJ}
+   echo "        host_name                   "${switch}"_Local"${LC}
    echo "        service_description         Ping"
    echo "        check_command               check_ping!100.0,20%!500.0,60%"
    echo "        }"
@@ -117,15 +117,15 @@ tr -cd "[:digit:][:punct:]\n" < /tmp/lista.txt > /tmp/lista_tratada.txt
 sed -i -e 's/\.0\|\.00/./g' /tmp/lista_tratada.txt
 
 # Exemplo de csv
-#LOJAS;SERVIDOR;LINK A LAN;LINK B LAN;LINK A WAN;LINK B WAN;FIREWALL INT;FIREWALL EXT;SWITCH 1;SWITCH 2;SWITCH 3;SWITCH 4;SWITCH 5;SWITCH 6;SWITCH 7;SWITCH 8
-#loja0012;52.1.4.1;52.1.4.16;52.1.4.17;200.179.63.66;100.126.56.30;NÃO POSSUI;NÃO POSSUI;52.1.4.5;52.1.4.6;52.1.4.7;NÃO POSSUI;NÃO POSSUI;NÃO POSSUI;NÃO POSSUI;NÃO POSSUI
+#Local;SERVIDOR;LINK A LAN;LINK B LAN;LINK A WAN;LINK B WAN;FIREWALL INT;FIREWALL EXT;SWITCH 1;SWITCH 2;SWITCH 3;SWITCH 4;SWITCH 5;SWITCH 6;SWITCH 7;SWITCH 8
+#Local0012;52.1.4.1;52.1.4.16;52.1.4.17;200.179.63.66;100.126.56.30;NÃO POSSUI;NÃO POSSUI;52.1.4.5;52.1.4.6;52.1.4.7;NÃO POSSUI;NÃO POSSUI;NÃO POSSUI;NÃO POSSUI;NÃO POSSUI
 
 for LINHA in $(cat /tmp/lista_tratada.txt); do
-        LJ=$(echo ${LINHA} |cut -d';' -f1)
+        LC=$(echo ${LINHA} |cut -d';' -f1)
 	
-	[ "${#LJ}" -eq 3 ] && LJ="0${LJ}"
-	[ "${#LJ}" -eq 2 ] && LJ="00${LJ}"
-	[ "${#LJ}" -eq 1 ] && LJ="000${LJ}"	
+	[ "${#LC}" -eq 3 ] && LC="0${LC}"
+	[ "${#LC}" -eq 2 ] && LC="00${LC}"
+	[ "${#LC}" -eq 1 ] && LC="000${LC}"	
 
         SERVIDOR=$(echo ${LINHA} |cut -d';' -f2)
         LinkAWAN=$(echo ${LINHA} |cut -d';' -f5)
@@ -144,67 +144,67 @@ for LINHA in $(cat /tmp/lista_tratada.txt); do
         SW7=$(echo ${LINHA} |cut -d';' -f15)
         SW8=$(echo ${LINHA} |cut -d';' -f16)
 
-        LinkAWAN > ${DIR}/link_de_loja/LinkA_Loja${LJ}.cfg
-        LinkBWAN > ${DIR}/link_de_loja/LinkB_Loja${LJ}.cfg
+        LinkAWAN > ${DIR}/link_do_Local/LinkA_Local${LC}.cfg
+        LinkBWAN > ${DIR}/link_do_Local/LinkB_Local${LC}.cfg
 
         if [ -n "${FW}" ]
         then
-                Firewall > ${DIR}/firewall/FW_Loja${LJ}.cfg
+                Firewall > ${DIR}/firewall/FW_Local${LC}.cfg
 
                 if [ -n "${SW1}" ]
                 then
                         switch="SW1"
 			SW="${SW1}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW2}" ]
                 then
                         switch="SW2"
 			SW="${SW2}"						
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW3}" ]
                 then
                         switch="SW3"
 			SW="${SW3}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW4}" ]
                 then
                         switch="SW4"
 			SW="${SW4}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW5}" ]
                 then
                         switch="SW5"
 			SW="${SW5}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW6}" ]
                 then
                         switch="SW6"
 			SW="${SW6}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW7}" ]
                 then
                         switch="SW7"
 			SW="${SW7}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW8}" ]
                 then
                         switch="SW8"
 			SW="${SW8}"
-                        Switch_fw > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_fw > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
         else
@@ -213,57 +213,56 @@ for LINHA in $(cat /tmp/lista_tratada.txt); do
                 then
 	                switch="SW1"
 			SW="${SW1}"
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW2}" ]
                 then
                         switch="SW2"
 			SW="${SW2}"
-			Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+			Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW3}" ]
                 then
 			switch="SW3"
 			SW="${SW3}"
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW4}" ]
                 then
                         switch="SW4"
 			SW="${SW4}"						
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW5}" ]
                 then
                         switch="SW5"
 			SW="${SW5}"
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW6}" ]
                 then
                         switch="SW6"
 			SW="${SW6}"						
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW7}" ]
                 then
                         switch="SW7"
 			SW="${SW7}"
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
 
                 if [ -n "${SW8}" ]
                 then
                         switch="SW8"
 			SW="${SW8}"
-                        Switch_link > ${DIR}/switch/${switch}_Loja${LJ}.cfg
+                        Switch_link > ${DIR}/switch/${switch}_Local${LC}.cfg
                 fi
         fi
 done
-

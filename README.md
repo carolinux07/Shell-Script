@@ -1,5 +1,5 @@
 # Shell-Script
-Script em Shell Script criados para automatizar tarefas. Esta demanda surgiu pela necessidade constante de inserção de equipamentos de rede nas configurações do Nagios e como a equipe de Telecom sempre enviava as informações no mesmo padrão, pensamos na em gerar algo que lê-se esse arquivo e criasse tudo, analisando o cenário passado, ou seja, dependendo das informações passadas as dependências mudariam.
+Script em Shell Script criados para automatizar tarefas. Esta demanda surgiu pela necessidade constante de inserção de equipamentos de rede nas configurações do Nagios e como a equipe de Telecom sempre enviava as informações no mesmo padrão, pensamos em gerar algo que lê-se esse arquivo e criasse tudo analisando cada cenário, ou seja, dependendo das informações passadas as dependências mudariam.
 
 -> gera_conf_local_nagios:
 

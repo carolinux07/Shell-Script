@@ -5,7 +5,7 @@ Script em Shell Script criados para automatizar tarefas. Esta demanda surgiu pel
 
 Script para automatizar a criação dos arquivos de configuração do Nagios (links, firewall e switchs). É feita a leitura de um arquivo csv e a partir daí o script valida as informações (por exemplo, se o IP possui um formato válido) e cria os arquivo de configuração, levando também em consideração alguns critérios de dependência (aqui utilizamos o recurso parents do Nagios) e condições de existência ou não de certos objetos.
 
-![Shell Script](Fluxograma_Painel_de_Telecom.png)
+![Shell Script](Fluxograma.jpg)
 
 Exemplo de csv.
 ```

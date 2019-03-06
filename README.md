@@ -1,7 +1,18 @@
 # Shell-Script
-Script em Shell Script criados para automatizar tarefas. Esta demanda surgiu pela necessidade constante de inserção de equipamentos de rede nas configurações do Nagios e como a equipe de Telecom sempre enviava as informações no mesmo padrão, pensamos em gerar algo que lê-se esse arquivo e criasse tudo analisando cada cenário, ou seja, dependendo das informações passadas as dependências mudariam.
+
+-> monitora_log_por_tempo:
+
+Script desenvolvido para verificar os últimos X minutos de um arquivo de log (neste exemplo estamos utilizando um log do nginx), indicando por exemplo:
+
+- Falha quando não é possível ler o log;
+- A quantidade de erros (baseada na lista de códigos de estado HTTP);
+
+Uma das premissas durante o desenvolvimento era facilitar a manipulação dos dados de referência de checagem de logs e quantidade de erros utilizados para comparação.
+
 
 -> gera_conf_local_nagios:
+
+Script em Shell Script criado para automatizar tarefas. Esta demanda surgiu pela necessidade constante de inserção de equipamentos de rede nas configurações do Nagios e como a equipe de Telecom sempre enviava as informações no mesmo padrão, pensamos em gerar algo que lê-se esse arquivo e criasse tudo analisando cada cenário, ou seja, dependendo das informações passadas as dependências mudariam.
 
 Script para automatizar a criação dos arquivos de configuração do Nagios (links, firewall e switchs). É feita a leitura de um arquivo csv e a partir daí o script valida as informações (por exemplo, se o IP possui um formato válido) e cria os arquivo de configuração, levando também em consideração alguns critérios de dependência (aqui utilizamos o recurso parents do Nagios) e condições de existência ou não de certos objetos.
 

@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Trabalhando com os últimos 5 minutos.
+hora_inicio=`date --date='5 minutes ago' '+%H:%M'`
+
+dia_inicio=`date --date='5 minutes ago' '+%d'`
+mes_inicio=`date --date='5 minutes ago' '+%b'`
+ano_inicio=`date --date='5 minutes ago' '+%Y'`
+
+# Obtendo informações atuais de data e hora.
+hora_fim=`date '+%H:%M'`
+
+dia_fim=`date '+%d'`
+mes_fim=`date '+%b'`
+ano_fim=`date '+%Y'`
+
+app_server=$1
+
+# Parêmetro de controle, quantidade de erros considerada satiafatória no tempo X determinado.
+erros=10
+
+function check_log() {
+
+#timeout 10 tail /var/log/nginx/access.log >/dev/null 2>&1
+timeout 10 tail /var/log/nginx/aplicacao.log >/dev/null 2>&1
+
+# Teste de controle pra exitência e acesso ao log.
+test=$?
+if [ ${test} -ne 0 ]
+   then
+        echo "CRITICAL - Erro na leitura do arquivo de log, verificar a permissão."
+        return 2
+fi
+
+# Primeiras tentativas
+#erro=`awk "/$dia_inicio\/$mes_inicio\/$ano_inicio:$hora_inicio/, /$dia_fim\/$mes_fim\/$ano_fim:$hora_fim/" /var/log/nginx/access.log | grep -Ev "200|499" | wc -l`
+
+# Ajuste que melhor atendeu para leitura e análise do log
+erro=`awk "/$dia_inicio\/$mes_inicio\/$ano_inicio:$hora_inicio/, /$dia_fim\/$mes_fim\/$ano_fim:$hora_fim/" /var/log/nginx/aplicacao.log | grep ${app_server} | grep -Ev "HTTP\/1.1 200|HTTP\/1.1 499" | wc -l`
+
+# Comapação e retorno dos resultados.
+if [ "$erro" -gt ${erros} ]
+then
+      echo "CRITICAL - MID ${mid_server} com mais de ${erros} erros no Nginx nos últimos 5 minutos: Validar conexão com BD e aplicação"
+      return 2
+else
+      echo "OK - MID ${mid_server} sem erros"
+      return 0
+fi
+
+}
+
+check_log ${mid_server}

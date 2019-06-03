@@ -16,7 +16,7 @@ ano_fim=`date '+%Y'`
 
 app_server=$1
 
-# Parêmetro de controle, quantidade de erros considerada satiafatória no tempo X determinado.
+# Parêmetro de controle, quantidade de erros considerada satisfatória no tempo X determinado.
 erros=10
 
 function check_log() {
@@ -24,7 +24,7 @@ function check_log() {
 #timeout 10 tail /var/log/nginx/access.log >/dev/null 2>&1
 timeout 10 tail /var/log/nginx/aplicacao.log >/dev/null 2>&1
 
-# Teste de controle pra exitência e acesso ao log.
+# Teste de controle pra existência e acesso ao log.
 test=$?
 if [ ${test} -ne 0 ]
    then
@@ -41,13 +41,13 @@ erro=`awk "/$dia_inicio\/$mes_inicio\/$ano_inicio:$hora_inicio/, /$dia_fim\/$mes
 # Comapação e retorno dos resultados.
 if [ "$erro" -gt ${erros} ]
 then
-      echo "CRITICAL - MID ${mid_server} com mais de ${erros} erros no Nginx nos últimos 5 minutos: Validar conexão com BD e aplicação"
+      echo "CRITICAL - ${server} com mais de ${erros} erros no Nginx nos últimos 5 minutos: Validar conexão com BD e aplicação"
       return 2
 else
-      echo "OK - MID ${mid_server} sem erros"
+      echo "OK - ${server} sem erros"
       return 0
 fi
 
 }
 
-check_log ${mid_server}
+check_log ${server}
